@@ -2,7 +2,7 @@
  * Created by manish on 11/2/17.
  */
 var dbconfig = require('../models/dbconfig');
-var passwordHash = require('password-hash');
+var md5 = require('md5');
 module.exports = {
     getUser:function (req, res, err) {
         var userId=req.params.id;
@@ -26,7 +26,7 @@ module.exports = {
 
     logInUser:function (req, res, err) {
         var emailId=req.body.id;
-        var userpPasswordHash=passwordHash.generate(req.body.passcode);
+        var userpPasswordHash=md5(req.body.passcode);
         console.log("user_id:" + emailId + "passcode" + userpPasswordHash);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
             var query = "select * from ?? where p_email_id= ? and p_password=?";
@@ -49,7 +49,7 @@ module.exports = {
         var userfname = req.body.fname;
         var email_id = req.body.email;
         var userlname = req.body.lname;
-        var passcode = passwordHash.generate(req.body.passcode);
+        var passcode = md5(req.body.passcode);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
             var query = "insert into ?? (p_name, p_last_name, p_email_id,p_password,welcome_date) values(?,?,?,?,NOW())";
             var table = ["parcer" , userfname ,userlname, email_id, passcode];
