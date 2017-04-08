@@ -8,5 +8,6 @@ var router = express.Router();
 /* GET home page. */
 router.get('/user/:id', userRout.getUser);
 router.post('/adduser', userRout.addUser);
+router.post('/loginuser', userRout.logInUser);
 //router.get('/v1/module', moduleRoute.getModule);
 module.exports = router;
