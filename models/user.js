@@ -25,13 +25,14 @@ module.exports = {
     },
 
     logInUser:function (req, res, err) {
-        var userId=req.body.id;
+        var emailId=req.body.id;
         var userpPasswordHash=passwordHash.generate(req.body.passcode);
+        console.log("user_id:" + emailId + "passcode" + userpPasswordHash);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
-            var query = "select * from ?? where p_id= ? and p_password=?";
-            var table = ["parcer" , userId, userpPasswordHash];
-            console.log(query);
+            var query = "select * from ?? where p_email_id= ? and p_password=?";
+            var table = ["parcer" , emailId, userpPasswordHash];
             query = dbconfig.msql.format(query, table);
+            console.log(query);
             dbconfig.connection.query(query, function (err, rows) {
                 if (err) {
                     res.json({"status": "failure", "data": err});
