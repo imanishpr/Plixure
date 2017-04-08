@@ -37,7 +37,10 @@ module.exports = {
                 if (err) {
                     res.json({"status": "failure", "data": err});
                 } else {
-                    res.json({"status": "Success", "data":{"modules":{ "module": rows }}});
+                    if(rows.length===0)
+                        res.json({"status": "failure", "data":{ rows }});
+                    else
+                        res.json({"status": "Success", "data":{ rows }});
                 }
             })
         } else {
