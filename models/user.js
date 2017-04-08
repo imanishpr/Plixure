@@ -25,8 +25,8 @@ module.exports = {
     },
 
     logInUser:function (req, res, err) {
-        var userId=req.params.id;
-        var userpPasswordHash=passwordHash.generate(req.params.passcode);
+        var userId=req.body.id;
+        var userpPasswordHash=passwordHash.generate(req.body.passcode);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
             var query = "select * from ?? where p_id= ? and p_password=?";
             var table = ["parcer" , userId, userpPasswordHash];
