@@ -71,4 +71,27 @@ module.exports = {
             res.json({"status": "failure", "data": "Wrong Security Code"});
         }
     }
+
+    changeUserPasscode: function (req, res, err) {
+        var oldpasscode = md5(req.body.oldpasscode);
+        var newpasscode =md5(req.body.newpasscode);
+        var email_id = req.body.email;
+        if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
+            var query = "UPDATE ?? SET p_password = ? WHERE p_email_id=? and p_password=?";
+            var table = ["parcer" , newpasscode, email_id, oldpasscode];
+            console.log(query);
+            query = dbconfig.msql.format(query, table);
+            dbconfig.connection.query(query, function (err, rows) {
+                if (err) {
+                    res.json({"status": "failure", "data": err});
+                } else {
+                    res.json({"status": "Success", "data":{"modules":{ "module": rows }}});
+                }
+            })
+        }
+        else
+        {
+            res.json({"status": "failure", "data": "Wrong Security Code"});
+        }
+    }
 }
