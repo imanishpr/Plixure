@@ -70,7 +70,7 @@ module.exports = {
         {
             res.json({"status": "failure", "data": "Wrong Security Code"});
         }
-    }
+    },
 
     changeUserPasscode: function (req, res, err) {
         var oldpasscode = md5(req.body.oldpasscode);
