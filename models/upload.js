@@ -7,6 +7,13 @@ module.exports = {
 
     imageUpload: function (req, res, err) {
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
+            dbconfig.connection.connect(function(err) {
+                if (err) {
+                    console.error('error connecting: ' + err.stack);
+                    return;
+                }
+              console.log('connected as id ' + dbconfig.connection.threadId);
+            });
             if(req.files.myImage.path){
                 cloudinary.uploader.upload(req.files.myImage.path,function(result) {
                     console.log(result);
@@ -21,12 +28,13 @@ module.exports = {
                     var table = ["parcer_images" , "" , albumId, "", imgDesc ,cDate, 1, imgUrl, imgSUrl];
                     query = dbconfig.msql.format(query, table);
                     console.log(query);
-                    dbconfig.connection.query(query, function (err, rows) {
+                    dbconfig.connection.query(query, functiontransaction in db calls (err, rows) {
                         if (err) {
                             res.json({"status": "failure", "data": err});
                         } else {
                             res.json({"status": "Success", "data":"Congo You did it !!"});
                         }
+                         dbconfig.connection.end();
                     })
                 });
             }
