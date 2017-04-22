@@ -54,26 +54,46 @@ module.exports = {
         var userlname = req.body.lname;
         var passcode = md5(req.body.passcode);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
-            var query = "insert into ?? (p_name, p_last_name, p_email_id,p_password,welcome_date) values(?,?,?,?,NOW())";
-            var table = ["parcer" , userfname ,userlname, email_id, passcode];
-            console.log(query);
-            query = dbconfig.msql.format(query, table);
-            dbconfig.connection.query(query, function (err, rows) {
+            connection.connect(function(err) {
                 if (err) {
-                    res.json({"status": "failure", "data": err});
-                } else {
-                    var query = "insert into ??  values(?,?,?,?,NOW())";
-                    var table = ["parcer_album" , "", rows.insertId,"", 18];
-                    query = dbconfig.msql.format(query, table);
-                    dbconfig.connection.query(query, function (err, rows) {
-                        if (err) {
-                            res.json({"status": "failure", "data": err});
-                        } else {
-                            res.json({"status": "Success", "data": rows });
-                        }
-                    })
+                    console.error('error connecting: ' + err.stack);
+                    return;
                 }
-            })
+              console.log('connected as id ' + connection.threadId);
+            });
+            connection.beginTransaction(function(err) {    
+                var query = "insert into ?? (p_name, p_last_name, p_email_id,p_password,welcome_date) values(?,?,?,?,NOW())";
+                var table = ["parcer" , userfname ,userlname, email_id, passcode];
+                console.log(query);
+                query = dbconfig.msql.format(query, table);
+                dbconfig.connection.query(query, function (err, rows) {
+                    if (err) {
+                        connection.rollback(function() {
+                            throw err;
+                        });
+                    } else {
+                        var query = "insert into ??  values(?,?,?,?,NOW())";
+                        var table = ["parcer_album" , "", rows.insertId,"", 18];
+                        query = dbconfig.msql.format(query, table);
+                        dbconfig.connection.query(query, function (err, rows) {
+                            if (err) {
+                                res.json({"status": "failure", "data": err});
+                            } else {
+                                      connection.commit(function(err) {
+                                        if (err) { 
+                                          connection.rollback(function() {
+                                            throw err;
+                                          });
+                                        }
+                                        console.log('Transaction Complete.');
+                                        connection.end();
+                                      });
+                                res.json({"status": "Success", "data": rows });
+                            }
+                        })
+                    }
+                })
+            });
         }
         else
         {
