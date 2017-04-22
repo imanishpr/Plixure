@@ -16,7 +16,7 @@ module.exports = {
                 if (err) {
                     res.json({"status": "failure", "data": err});
                 } else {
-                    res.json({"status": "Success", "data":{"modules":{ "module": rows }}});
+                    res.json({"status": "Success", "data":rows });
                 }
             })
         } else {
@@ -62,7 +62,16 @@ module.exports = {
                 if (err) {
                     res.json({"status": "failure", "data": err});
                 } else {
-                    res.json({"status": "Success", "data":{"modules":{ "module": rows }}});
+                    var query = "insert into ??  values("",?,"",'18',NOW())";
+                    var table = ["parcer_album" , rows.insertId];
+                    query = dbconfig.msql.format(query, table);
+                    dbconfig.connection.query(query, function (err, rows) {
+                        if (err) {
+                            res.json({"status": "failure", "data": err});
+                        } else {
+                            res.json({"status": "Success", "data": rows });
+                        }
+                    })
                 }
             })
         }
