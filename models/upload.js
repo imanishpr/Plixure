@@ -32,7 +32,7 @@ module.exports = {
                         if (err) {
                             res.json({"status": "failure", "data": err});
                         } else {
-                            res.json({"status": "Success", "data":"Congo You did it !!"});
+                            res.json({"status": "Success", "data":rows});
                         }
                          dbconfig.connection.end();
                     })
