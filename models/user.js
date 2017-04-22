@@ -54,13 +54,6 @@ module.exports = {
         var userlname = req.body.lname;
         var passcode = md5(req.body.passcode);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
-            dbconfig.connection.connect(function(err) {
-                if (err) {
-                    console.error('error connecting: ' + err.stack);
-                    return;
-                }
-              console.log('connected as id ' + dbconfig.connection.threadId);
-            });
             dbconfig.connection.beginTransaction(function(err) {    
                 var query = "insert into ?? (p_name, p_last_name, p_email_id,p_password,welcome_date) values(?,?,?,?,NOW())";
                 var table = ["parcer" , userfname ,userlname, email_id, passcode];
@@ -88,7 +81,6 @@ module.exports = {
                                           });
                                         }
                                         console.log('Transaction Complete.');
-                                        dbconfig.connection.end();
                                       });
                                 res.json({"status": "Success", "data": rows });
                             }
