@@ -69,6 +69,7 @@ module.exports = {
                 dbconfig.connection.query(query, function (err, rows) {
                     if (err) {
                         dbconfig.connection.rollback(function() {
+                            res.json({"status": "failure", "data": err});
                             throw err;
                         });
                     } else {
@@ -82,6 +83,7 @@ module.exports = {
                                         dbconfig.connection.commit(function(err) {
                                         if (err) { 
                                           dbconfig.connection.rollback(function() {
+                                            res.json({"status": "failure", "data": err});
                                             throw err;
                                           });
                                         }
