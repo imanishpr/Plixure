@@ -54,21 +54,21 @@ module.exports = {
         var userlname = req.body.lname;
         var passcode = md5(req.body.passcode);
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
-            connection.connect(function(err) {
+            dbconfig.connection.connect(function(err) {
                 if (err) {
                     console.error('error connecting: ' + err.stack);
                     return;
                 }
-              console.log('connected as id ' + connection.threadId);
+              console.log('connected as id ' + dbconfig.connection.threadId);
             });
-            connection.beginTransaction(function(err) {    
+            dbconfig.connection.beginTransaction(function(err) {    
                 var query = "insert into ?? (p_name, p_last_name, p_email_id,p_password,welcome_date) values(?,?,?,?,NOW())";
                 var table = ["parcer" , userfname ,userlname, email_id, passcode];
                 console.log(query);
                 query = dbconfig.msql.format(query, table);
                 dbconfig.connection.query(query, function (err, rows) {
                     if (err) {
-                        connection.rollback(function() {
+                        dbconfig.connection.rollback(function() {
                             throw err;
                         });
                     } else {
@@ -79,14 +79,14 @@ module.exports = {
                             if (err) {
                                 res.json({"status": "failure", "data": err});
                             } else {
-                                      connection.commit(function(err) {
+                                        dbconfig.connection.commit(function(err) {
                                         if (err) { 
-                                          connection.rollback(function() {
+                                          dbconfig.connection.rollback(function() {
                                             throw err;
                                           });
                                         }
                                         console.log('Transaction Complete.');
-                                        connection.end();
+                                        dbconfig.connection.end();
                                       });
                                 res.json({"status": "Success", "data": rows });
                             }
