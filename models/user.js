@@ -62,8 +62,8 @@ module.exports = {
                 if (err) {
                     res.json({"status": "failure", "data": err});
                 } else {
-                    var query = "insert into ??  values("",?,"",'18',NOW())";
-                    var table = ["parcer_album" , rows.insertId];
+                    var query = "insert into ??  values(?,?,?,?,NOW())";
+                    var table = ["parcer_album" , "", rows.insertId,"", 18];
                     query = dbconfig.msql.format(query, table);
                     dbconfig.connection.query(query, function (err, rows) {
                         if (err) {
