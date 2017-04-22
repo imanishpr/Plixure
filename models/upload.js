@@ -28,7 +28,7 @@ module.exports = {
                     var table = ["parcer_images" , "" , albumId, "", imgDesc ,cDate, 1, imgUrl, imgSUrl];
                     query = dbconfig.msql.format(query, table);
                     console.log(query);
-                    dbconfig.connection.query(query, functiontransaction in db calls (err, rows) {
+                    dbconfig.connection.query(query, function (err, rows) {
                         if (err) {
                             res.json({"status": "failure", "data": err});
                         } else {
