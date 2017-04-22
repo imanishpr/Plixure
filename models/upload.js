@@ -33,8 +33,9 @@ module.exports = {
                             res.json({"status": "failure", "data": err});
                         } else {
                             res.json({"status": "Success", "data":rows});
+                            dbconfig.connection.end();
                         }
-                         dbconfig.connection.end();
+                         
                     })
                 });
             }
