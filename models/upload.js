@@ -7,8 +7,9 @@ module.exports = {
 
     imageUpload: function (req, res, err) {
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
+            console.log(req.body);
             if(req.files.myImage.path && req.body.userId ){
-                cloudinary.uploader.upload(req.files.myImage.path, { folder : req.body.userId.toString() }, function(result) {
+                cloudinary.uploader.upload(req.files.myImage.path, { folder : 'max' }, function(result) {
                     console.log(result);
                     var userId  =   req.body.userId;
                     var imgDesc =   req.body.imgDesc;
