@@ -18,9 +18,11 @@ var upload = function (image, res, albumId, imgDesc){
             dbconfig.connection.query(query, function (err, rows) {
                 if (err) {
                     res.json({"status": "failure", "data": err});
+                    return;
                 } else {
                     console.log(JSON.stringify(rows));
                     res.json({"status": "Success", "data":rows });
+                    return;
                 }
                  
             })
@@ -56,6 +58,7 @@ module.exports = {
                 })
             }else{
                 res.json(upload(req.files.myImage.path, res, albumId, imgDesc));
+                return;
             }
         }
     }
