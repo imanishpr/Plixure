@@ -67,5 +67,32 @@ module.exports = {
             });
             }
         }
+    },
+    getImage: function(req, res, err){
+        var user_id=req.params.id;
+        if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon') {
+            var query = "select * from ?? inner join ?? on uploaded_module_photo.userid=userinfo.userid where userinfo.userid=?";
+            var table = ["uploaded_module_photo","userinfo",user_id];
+
+            query = dbconfig.msql.format(query, table);
+            console.log(query);
+            dbconfig.connection.query(query, function (err, rows) {
+                if (err) {
+                    res.json({"status": "failure", "data": "Error executing MySQL query"});
+                } else {
+                    res.json({"status": "Success", "data": {"projectlist": rows}});
+                }
+            })
+        }
+        else
+        {
+            res.json({"status": "failure", "data": "Wrong Security Code"});
+        }
+    }
+    getAlbum: function(req, res, err){
+        
+    },
+    makeImagePrivate: function(req, res, err){
+
     }
 }
