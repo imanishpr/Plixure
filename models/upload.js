@@ -17,9 +17,9 @@ var upload = function (image, userId, albumId, imgDesc){
             console.log(query);
             dbconfig.connection.query(query, function (err, rows) {
                 if (err) {
-                    res.json({"status": "failure", "data": err});
+                    return {"status": "failure", "data": err};
                 } else {
-                    res.json({"status": "Success", "data":rows});
+                    return {"status": "Success", "data":rows};
                 }
                  
             })
@@ -37,7 +37,7 @@ module.exports = {
             var imgDesc =   req.body.imgDesc;
             var albumId =   req.body.albumId;
             if((typeof albumId === 'undefined' || albumId === '')){
-                var query = "select pa_id from  ??  where parcer_id = ? and status = ?";
+                var query = "select pa_id from  ??  where parcer_id = ? and pa_status = ?";
                 var table = ["parcer_album" , userId , 18];
                 query = dbconfig.msql.format(query, table);
                 console.log(query);
@@ -47,12 +47,13 @@ module.exports = {
                         return;
                     } else {
                         albumId = rows.pa_id;
-                        upload(req.files.myImage.path, userId, albumId, imgDesc);
+                        console.log("myId"+ albumId);
+                        res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
                     }
                      
                 })
             }else{
-                upload(req.files.myImage.path, userId, albumId, imgDesc);
+                res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
             }
         }
     }
