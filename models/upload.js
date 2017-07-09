@@ -11,8 +11,8 @@ module.exports = {
             var userId  =   req.body.userId;
             var imgDesc =   req.body.imgDesc;
             var albumId =   req.body.albumId;
-            if((typeof albumId === 'undefined' || req.body.albumId === '')){
-                var query = "select pa_id from  ??  where pa_id = ? and status = ?";
+            if((typeof albumId === 'undefined' || albumId === '')){
+                var query = "select pa_id from  ??  where parcer_id = ? and status = ?";
                 var table = ["parcer_album" , userId , 18];
                 query = dbconfig.msql.format(query, table);
                 console.log(query);
@@ -22,11 +22,13 @@ module.exports = {
                         return;
                     } else {
                         albumId = rows.pa_id;
+                        console.log(albumId);
                     }
                      
                 })
             }
-            if(req.files.myImage.path && req.userId ){
+            if(req.files.myImage.path){
+                console.log('hello');
                 cloudinary.uploader.upload(req.files.myImage.path, function(result) {
                     var imgUrl  =   result.url;
                     var imgSUrl =   result.secure_url;
