@@ -3,7 +3,7 @@
  */
 var cloudinary = require('../helpers/cloudinary').cloudinary;
 var dbconfig = require('../models/dbconfig');
-var upload = function (image, userId, albumId, imgDesc){
+var upload = function (image, res, albumId, imgDesc){
      if(image){
         console.log('hello');
         cloudinary.uploader.upload(image, function(result) {
@@ -17,10 +17,10 @@ var upload = function (image, userId, albumId, imgDesc){
             console.log(query);
             dbconfig.connection.query(query, function (err, rows) {
                 if (err) {
-                    return {"status": "failure", "data": err};
+                    res.json({"status": "failure", "data": err});
                 } else {
                     console.log(JSON.stringify(rows));
-                    return {"status": "Success", "data":rows};
+                    res.json({"status": "Success", "data":rows });
                 }
                  
             })
@@ -47,15 +47,15 @@ module.exports = {
                         res.json({"status": "failure", "data": err});
                         return;
                     } else {
-                        albumId = rows;
-                        console.log("myId"+ JSON.stringify(albumId));
-                        res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
+                        albumId = rows[0].pa_id;
+                        console.log("myId"+ albumId);
+                        res.json(upload(req.files.myImage.path, res, albumId, imgDesc));
                         return;
                     }
                      
                 })
             }else{
-                res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
+                res.json(upload(req.files.myImage.path, res, albumId, imgDesc));
             }
         }
     }
