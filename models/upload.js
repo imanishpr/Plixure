@@ -47,9 +47,10 @@ module.exports = {
                         res.json({"status": "failure", "data": err});
                         return;
                     } else {
-                        albumId = rows.pa_id;
-                        console.log("myId"+ albumId);
+                        albumId = rows;
+                        console.log("myId"+ json.stringify(albumId));
                         res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
+                        return;
                     }
                      
                 })
