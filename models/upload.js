@@ -48,7 +48,7 @@ module.exports = {
                         return;
                     } else {
                         albumId = rows;
-                        console.log("myId"+ json.stringify(albumId));
+                        console.log("myId"+ JSON.stringify(albumId));
                         res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
                         return;
                     }
