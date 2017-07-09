@@ -21,7 +21,7 @@ module.exports = {
                         return;
                     } else {
                         albumId = rows[0].pa_id;
-                        cloudinary.uploader.upload(image, function(result) {
+                        cloudinary.uploader.upload(req.files.myImage.path, function(result) {
                         var imgUrl  =   result.url;
                         var imgSUrl =   result.secure_url;
                         var imgPId  =   result.public_id;
@@ -45,7 +45,7 @@ module.exports = {
                      
             })
             }else{
-                cloudinary.uploader.upload(image, function(result) {
+                cloudinary.uploader.upload(req.files.myImage.path, function(result) {
                 var imgUrl  =   result.url;
                 var imgSUrl =   result.secure_url;
                 var imgPId  =   result.public_id;
