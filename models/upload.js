@@ -19,6 +19,7 @@ var upload = function (image, userId, albumId, imgDesc){
                 if (err) {
                     return {"status": "failure", "data": err};
                 } else {
+                    console.log(JSON.Stringify(rows));
                     return {"status": "Success", "data":rows};
                 }
                  
@@ -46,7 +47,7 @@ module.exports = {
                         res.json({"status": "failure", "data": err});
                         return;
                     } else {
-                        albumId = rows;
+                        albumId = rows.pa_id;
                         console.log("myId"+ albumId);
                         res.json(upload(req.files.myImage.path, userId, albumId, imgDesc));
                     }
