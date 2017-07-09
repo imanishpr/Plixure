@@ -8,6 +8,9 @@ module.exports = {
     imageUpload: function (req, res, err) {
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
             console.log(req.body);
+            var userId  =   req.body.userId;
+            var imgDesc =   req.body.imgDesc;
+            var albumId =   req.body.albumId;
             if((typeof albumId === 'undefined' || req.body.albumId === '')){
                 var query = "select pa_id from  ??  where pa_id = ? and status = ?";
                 var table = ["parcer_album" , userId , 18];
@@ -23,14 +26,8 @@ module.exports = {
                      
                 })
             }
-
-
-            
             if(req.files.myImage.path && req.userId ){
                 cloudinary.uploader.upload(req.files.myImage.path, function(result) {
-                    var userId  =   req.body.userId;
-                    var imgDesc =   req.body.imgDesc;
-                    var albumId =   req.body.albumId;
                     var imgUrl  =   result.url;
                     var imgSUrl =   result.secure_url;
                     var imgPId  =   result.public_id;
