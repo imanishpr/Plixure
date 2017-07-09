@@ -19,7 +19,7 @@ var upload = function (image, userId, albumId, imgDesc){
                 if (err) {
                     return {"status": "failure", "data": err};
                 } else {
-                    console.log(JSON.Stringify(rows));
+                    console.log(JSON.stringify(rows));
                     return {"status": "Success", "data":rows};
                 }
                  
