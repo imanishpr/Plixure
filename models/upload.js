@@ -3,35 +3,6 @@
  */
 var cloudinary = require('../helpers/cloudinary').cloudinary;
 var dbconfig = require('../models/dbconfig');
-var upload = function (image, res, albumId, imgDesc){
-     if(image){
-        console.log('hello');
-        cloudinary.uploader.upload(image, function(result) {
-            var imgUrl  =   result.url;
-            var imgSUrl =   result.secure_url;
-            var imgPId  =   result.public_id;
-            var cDate   =   result.created_at;
-            var query = "insert into ??  values(?,?,?,?,?,?,?,?)";
-            var table = ["parcer_images" , "" , albumId, "", imgDesc ,cDate, 1, imgUrl, imgSUrl];
-            query = dbconfig.msql.format(query, table);
-            console.log(query);
-            dbconfig.connection.query(query, function (err, rows) {
-                if (err) {
-                    res.json({"status": "failure", "data": err});
-                    return;
-                } else {
-                    console.log(JSON.stringify(rows));
-                    res.json({"status": "Success", "data":rows });
-                    return;
-                }
-                 
-            })
-        });
-    }
-    else {
-    res.json({"status": "failure", "data": "Wrong Security Code"});
-    }
-}
 module.exports = {
     imageUpload: function (req, res, err) {
         if (req.header('X-FUTZ-SEC') == 'SorryForDelay-GetBackToYouSoon'){
@@ -50,15 +21,50 @@ module.exports = {
                         return;
                     } else {
                         albumId = rows[0].pa_id;
-                        console.log("myId"+ albumId);
-                        res.json(upload(req.files.myImage.path, res, albumId, imgDesc));
+                        cloudinary.uploader.upload(image, function(result) {
+                        var imgUrl  =   result.url;
+                        var imgSUrl =   result.secure_url;
+                        var imgPId  =   result.public_id;
+                        var cDate   =   result.created_at;
+                        var query = "insert into ??  values(?,?,?,?,?,?,?,?)";
+                        var table = ["parcer_images" , "" , albumId, "", imgDesc ,cDate, 1, imgUrl, imgSUrl];
+                        query = dbconfig.msql.format(query, table);
+                        console.log(query);
+                        dbconfig.connection.query(query, function (err, rows) {
+                            if (err) {
+                                res.json({"status": "failure", "data": err});
+                                return;
+                            } else {
+                                res.json({"status": "Success", "data":rows });
+                                return;
+                            }
+                             
+                        })
+                    });
+                }
+                     
+            })
+            }else{
+                cloudinary.uploader.upload(image, function(result) {
+                var imgUrl  =   result.url;
+                var imgSUrl =   result.secure_url;
+                var imgPId  =   result.public_id;
+                var cDate   =   result.created_at;
+                var query = "insert into ??  values(?,?,?,?,?,?,?,?)";
+                var table = ["parcer_images" , "" , albumId, "", imgDesc ,cDate, 1, imgUrl, imgSUrl];
+                query = dbconfig.msql.format(query, table);
+                console.log(query);
+                dbconfig.connection.query(query, function (err, rows) {
+                    if (err) {
+                        res.json({"status": "failure", "data": err});
+                        return;
+                    } else {
+                        res.json({"status": "Success", "data":rows });
                         return;
                     }
                      
                 })
-            }else{
-                res.json(upload(req.files.myImage.path, res, albumId, imgDesc));
-                return;
+            });
             }
         }
     }
