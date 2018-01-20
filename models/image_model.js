@@ -88,7 +88,7 @@ module.exports = {
         {
             res.json({"status": "failure", "data": "Wrong Security Code"});
         }
-    }
+    },
     getAlbum: function(req, res, err){
         
     },
