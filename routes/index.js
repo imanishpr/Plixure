@@ -1,6 +1,5 @@
 var express = require('express');
 var homeroute = require('../models/home');
-var moduleRoute = require('../models/module');
 var router = express.Router();
 
 /* GET home page. */
